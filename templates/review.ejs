@@ -1,52 +1,67 @@
 <!-- DO NOT MODIFY THIS FILE -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Review an Album</title>
-  </head>
 
-  <body>
-    <h1>Review an Album</h1>
-    <form
-      id="reviewForm"
-      action="/review"
-      method="post"
-      onsubmit="return confirmSubmit()"
-    >
-      <fieldset>
-        <label>Album Name: <input type="text" name="albumName" /></label>
-        <br />
-        <br />
-        <label>Artist: <input type="text" name="artist" /></label>
-        <br />
-        <br />
-        <label>Rating: <input type="number" step="0.01" name="rating" /></label>
-        <br />
-        <br />
-        <label>
-          Description<br /><br />
-          <textarea rows="5" cols="80" name="description"></textarea>
-        </label>
-        <br />
-        <br />
-        <input type="reset" />
-        <input type="submit" value="Submit Review" />
-      </fieldset>
-    </form>
-    <hr />
-    <p><a href="./">HOME</a></p>
-    <script>
-      function confirmSubmit() {
-        if (
-          confirm(
-            "Are you sure you want to submit your review\nYou will not be able to change it once submitted"
-          )
-        ) {
-          return true;
-        }
-        return false;
+<head>
+  <meta charset="utf-8" />
+  <title>Review an Album</title>
+  <style>
+    body {
+      background-color: #333;
+      color: gold;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    h1,
+    h2 {
+      text-decoration: underline;
+      margin: 20px 0;
+    }
+
+    a {
+      color: #DC143C;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Review an Album</h1>
+  <form id="reviewForm" action="/review" method="post" onsubmit="return confirmSubmit()">
+    <fieldset>
+      <label>Album Name: <input type="text" name="albumName" /></label>
+      <br />
+      <br />
+      <label>Artist: <input type="text" name="artist" /></label>
+      <br />
+      <br />
+      <label>Rating: <input type="number" step="0.01" name="rating" /></label>
+      <br />
+      <br />
+      <label>
+        Description:<br /><br />
+        <textarea rows="5" cols="80" name="description"></textarea>
+      </label>
+      <br />
+      <br />
+      <input type="reset" />
+      <input type="submit" value="Submit Review" />
+    </fieldset>
+  </form>
+  <hr />
+  <p><a href="./">HOME</a></p>
+  <script>
+    function confirmSubmit() {
+      if (
+        confirm(
+          "Are you sure you want to submit your review\nYou will not be able to change it once submitted"
+        )
+      ) {
+        return true;
       }
-    </script>
-  </body>
+      return false;
+    }
+  </script>
+</body>
+
 </html>
