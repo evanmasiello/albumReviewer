@@ -8,7 +8,7 @@ if (args.length != 1) {
   process.exit(1);
 } else {
   const express = require("express");
-  const axios = require("axios"); 
+  const axios = require("axios");
   const portNumber = args[0];
 
   const app = express();
@@ -64,23 +64,27 @@ if (args.length != 1) {
   // Function to fetch album cover URL
   async function getAlbumCover(albumName) {
     try {
-      const searchResponse = await axios.get(`https://musicbrainz.org/ws/2/release?query=release:"${albumName}"&fmt=json`);
+      const searchResponse = await axios.get(
+        `https://musicbrainz.org/ws/2/release?query=release:"${albumName}"&fmt=json`
+      );
       const releases = searchResponse.data.releases;
 
       if (releases.length > 0) {
         const mbid = releases[0].id;
-        const coverArtResponse = await axios.get(`https://coverartarchive.org/release/${mbid}/front`);
+        const coverArtResponse = await axios.get(
+          `https://coverartarchive.org/release/${mbid}/front`
+        );
 
         // Return the cover art URL
         return coverArtResponse.config.url;
       } else {
         // Return a placeholder image URL if no album found
-        return 'https://via.placeholder.com/150';
+        return "https://via.placeholder.com/150";
       }
     } catch (error) {
-      console.error('Error fetching album cover:', error);
+      console.error("Error fetching album cover:", error);
       // Return a placeholder image URL in case of an error
-      return 'https://via.placeholder.com/150';
+      return "https://via.placeholder.com/150";
     }
   }
 
@@ -95,22 +99,26 @@ if (args.length != 1) {
   app.post("/review", (request, response) => {
     const post_data = request.body;
 
-    submitApplication(
+    let rating = post_data.rating;
+    if (rating < 0) rating = 0;
+    if (rating > 5) rating = 5;
+
+    submitRating(
       post_data.albumName,
       post_data.artist,
       post_data.description,
-      post_data.rating
+      rating
     );
 
     response.render("../templates/proccessReviews", {
       albumName: post_data.albumName,
       artist: post_data.artist,
       description: post_data.description,
-      rating: post_data.rating,
+      rating: rating,
     });
   });
 
-  async function submitApplication(albumName, artist, description, rating) {
+  async function submitRating(albumName, artist, description, rating) {
     try {
       await client.connect();
 
@@ -142,11 +150,11 @@ if (args.length != 1) {
     filterRating(post_data.rating, response);
   });
 
-  async function filterRating(rating, response) {
+  async function filterRating(ratingVal, response) {
     try {
       await client.connect();
 
-      let filter = { rating: { $gte: rating } };
+      let filter = { rating: { $gte: ratingVal } };
 
       const cursor = await client
         .db(databaseAndCollection.db)
@@ -166,7 +174,9 @@ if (args.length != 1) {
           element.artist +
           "</td><td>" +
           element.rating +
-          "</td><td><img src='" + coverArt + "' alt='Album Cover' width='100'></td></tr>";
+          "</td><td><img src='" +
+          coverArt +
+          "' alt='Album Cover' width='100'></td></tr>";
       }
 
       response.render("../templates/listReviews", {
@@ -207,7 +217,9 @@ if (args.length != 1) {
           element.description +
           "</td><td>" +
           element.rating +
-          "</td><td><img src='" + coverArt + "' alt='Album Cover' width='100'></td></tr>";
+          "</td><td><img src='" +
+          coverArt +
+          "' alt='Album Cover' width='100'></td></tr>";
       }
 
       response.render("../templates/readReviews", {
